@@ -27,10 +27,12 @@ public class Pen {
 	}
 
 	protected void drawLine(Point start, Point finish) {
-		Line line = new Line(start.getX(), start.getY(), finish.getX(), finish.getY());
-		line.setStroke(color);
-		line.setStrokeWidth(thickness);
-		display.addToDisplayArea(line);
+		if(isDownProperty.get() && areInSameQuadrant(start, finish)) {
+			Line line = new Line(start.getX(), start.getY(), finish.getX(), finish.getY());
+			line.setStroke(color);
+			line.setStrokeWidth(thickness);
+			display.addToDisplayArea(line);
+		}
 	}
 	
 	protected ReadOnlyBooleanProperty readOnlyIsDownProperty() {
@@ -63,5 +65,9 @@ public class Pen {
 	
 	protected void setThickness(double width) {
 		thickness = width;
+	}
+	
+	private boolean areInSameQuadrant(Point a, Point b) {
+		return (a.getX() * b.getX() >= 0) && (a.getY() * b.getY() >= 0);
 	}
 }

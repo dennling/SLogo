@@ -23,11 +23,8 @@ public class Turtle {
 	private Pen myPen;
 	private Compass myCompass;
 	private Schedule mySchedule;
-
-	private SimpleBooleanProperty isMovingProperty;
-	private int myStepsRemaining;
-	private Point myStepSize;
-
+	private Shoe myShoe;
+	
 	protected Turtle(TurtleDisplay home, int ID, Image image) {
 		myDisplay = home;
 		myID = ID;
@@ -39,8 +36,7 @@ public class Turtle {
 		myPen = new Pen(myDisplay, true, Color.BLACK, 1, 1.0);
 		myCompass = new Compass();
 		mySchedule = new Schedule();
-		
-		isMovingProperty = new SimpleBooleanProperty(false);
+		myShoe = new Shoe();
 		
 		this.setLocation(new Point(0, 0));
 		this.setRotation(90.0);
@@ -124,7 +120,7 @@ public class Turtle {
 	}
 	
 	protected BooleanProperty isMovingProperty() {
-		return isMovingProperty;
+		return myShoe.movingProperty();
 	}
 
 	protected ReadOnlyBooleanProperty readOnlyPenDownProperty() {
@@ -148,66 +144,46 @@ public class Turtle {
 	}
 	
 	protected void setDestination(Point destination, double speed) {
-		isMovingProperty.set(true);
 		double distX = destination.getX() - myCompass.getX();
 		double distY = destination.getY() - myCompass.getY();
-		double stepsToDestination = getNumStepsAlongPath(distX, distY, speed);
-
-		myStepsRemaining = (int) (stepsToDestination);
-		double myStepSizeX = distX / stepsToDestination;
-		double myStepSizeY = distY / stepsToDestination;
-		myStepSize = new Point(myStepSizeX, myStepSizeY);
+		
+		myShoe.setMoving(true);
+		myShoe.adjustStepSizeForPath(distX, distY, speed);
 
 		mySchedule.setDestination(destination);
 	}
 
 	protected void updateMovement() {
-		if (myStepsRemaining > 0) {
+		if (myShoe.numStepsRemaining() > 0) {
 			this.stepTowardsDestination();
-			myStepsRemaining--;
 		} else {
-			isMovingProperty.set(false);
+			myShoe.setMoving(false);
 		}
 	}
 	
+	private void stepTowardsDestination() {
+		Point step = myShoe.takeStep();
+		Point nextLocation = new Point(myCompass.getX() + step.getX(), myCompass.getY() + step.getY());
+
+		Point adjustedStart = myCompass.getLocation();
+		Point adjustedFinish = nextLocation;
+		if (!myDisplay.isInBounds(adjustedStart) && !myDisplay.isInBounds(adjustedFinish)) {
+			adjustedStart = myDisplay.wrapIntoView(adjustedStart);
+			adjustedFinish = myDisplay.wrapIntoView(adjustedFinish);
+		}
+		myPen.drawLine(adjustedStart, adjustedFinish);
+
+		this.setLocation(nextLocation);
+	}
+
 	private void setLocation(Point point) {
 		myCompass.setX(point.getX());
 		myCompass.setY(point.getY());
 		myTurtleGraphic.setCenter(point);
 	}
 	
-	private void stepTowardsDestination() {
-		Point step = new Point(myCompass.getX() + myStepSize.getX(), myCompass.getY() + myStepSize.getY());
-
-		if (myPen.isDown()) {
-			Point adjustedLoc = myCompass.getLocation();
-			Point adjustedStep = step;
-			if (!myDisplay.isInBounds(adjustedLoc) && !myDisplay.isInBounds(adjustedStep)) {
-				adjustedLoc = myDisplay.wrapIntoView(adjustedLoc);
-				adjustedStep = myDisplay.wrapIntoView(adjustedStep);
-			}
-			if (areInSameQuadrant(adjustedLoc, adjustedStep)) {
-				myPen.drawLine(adjustedLoc, adjustedStep);
-			}
-		}
-
-		this.setLocation(step);
-	}
-
 	private void setRotation(double degrees) {
 		myCompass.setHeading(degrees % 360);
 		myTurtleGraphic.setRotation(degrees);
-	}
-	
-	private boolean areInSameQuadrant(Point a, Point b) {
-		return (a.getX() * b.getX() >= 0) && (a.getY() * b.getY() >= 0);
-	}
-
-	private double getNumStepsAlongPath(double distanceX, double distanceY, double stepLength) {
-		if (Math.abs(distanceY) >= Math.abs(distanceX)) {
-			return Math.abs(distanceY / stepLength);
-		} else {
-			return Math.abs(distanceX / stepLength);
-		}
 	}
 }
