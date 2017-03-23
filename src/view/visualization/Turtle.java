@@ -12,7 +12,8 @@ import javafx.scene.paint.Color;
 /**
  * @author Jay Doherty
  * This class encapsulates all of the Turtle's behavior into an interface. Methods called on this
- * class can move the turtle around the display.
+ * class can move the turtle around the display. The turtle uses the Graphic, Pen, Compass, Schedule,
+ * and Shoe objects to control its behavior.
  */
 public class Turtle {
 	private TurtleDisplay myDisplay;
@@ -144,11 +145,11 @@ public class Turtle {
 	}
 	
 	protected void setDestination(Point destination, double speed) {
-		double distX = destination.getX() - myCompass.getX();
-		double distY = destination.getY() - myCompass.getY();
+		double displacementX = destination.getX() - myCompass.getX();
+		double displacementY = destination.getY() - myCompass.getY();
 		
 		myShoe.setMoving(true);
-		myShoe.adjustStepSizeForPath(distX, distY, speed);
+		myShoe.adjustStepSizeForPath(displacementX, displacementY, speed);
 
 		mySchedule.setDestination(destination);
 	}
@@ -165,13 +166,7 @@ public class Turtle {
 		Point step = myShoe.takeStep();
 		Point nextLocation = new Point(myCompass.getX() + step.getX(), myCompass.getY() + step.getY());
 
-		Point adjustedStart = myCompass.getLocation();
-		Point adjustedFinish = nextLocation;
-		if (!myDisplay.isInBounds(adjustedStart) && !myDisplay.isInBounds(adjustedFinish)) {
-			adjustedStart = myDisplay.wrapIntoView(adjustedStart);
-			adjustedFinish = myDisplay.wrapIntoView(adjustedFinish);
-		}
-		myPen.drawLine(adjustedStart, adjustedFinish);
+		myPen.drawLine(myCompass.getLocation(), nextLocation);
 
 		this.setLocation(nextLocation);
 	}
