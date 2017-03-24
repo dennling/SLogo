@@ -114,7 +114,7 @@ public class TurtleManager {
 
 	protected void stepTurtles() {
 		applyToTurtles(turtle -> {
-			if (turtle.isMovingProperty().get()) {
+			if (turtle.readOnlyMovingProperty().get()) {
 				turtle.updateMovement();
 			} else {
 				if (turtle.getSchedule().hasAnotherDestination()) {

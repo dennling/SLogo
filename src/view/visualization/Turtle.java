@@ -120,8 +120,8 @@ public class Turtle {
 		return isActiveProperty;
 	}
 	
-	protected BooleanProperty isMovingProperty() {
-		return myShoe.movingProperty();
+	protected ReadOnlyBooleanProperty readOnlyMovingProperty() {
+		return myShoe.readOnlyMovingProperty();
 	}
 
 	protected ReadOnlyBooleanProperty readOnlyPenDownProperty() {
@@ -145,11 +145,8 @@ public class Turtle {
 	}
 	
 	protected void setDestination(Point destination, double speed) {
-		double displacementX = destination.getX() - myCompass.getX();
-		double displacementY = destination.getY() - myCompass.getY();
-		
 		myShoe.setMoving(true);
-		myShoe.adjustStepSizeForPath(displacementX, displacementY, speed);
+		myShoe.adjustStepSizeForPath(myCompass.getLocation(), destination, speed);
 
 		mySchedule.setDestination(destination);
 	}

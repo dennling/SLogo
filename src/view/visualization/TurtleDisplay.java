@@ -92,14 +92,14 @@ public class TurtleDisplay extends StackPane {
 	 * @param point
 	 */
 	protected void moveTurtle(Turtle turtle, Point destination) {
-		if (turtle.isMovingProperty().get()) {
+		if (turtle.readOnlyMovingProperty().get()) {
 			turtle.getSchedule().addFutureDestination(destination);
 		} else {
 			turtle.setDestination(destination, myLineLength);
 		}
 
 		if (myAnimationSpeed.get() == mySpeedSlider.getMax()) {
-			while (turtle.isMovingProperty().get()) {
+			while (turtle.readOnlyMovingProperty().get()) {
 				turtle.updateMovement();
 			}
 		}

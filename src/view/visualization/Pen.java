@@ -18,7 +18,9 @@ import utils.Point;
  * 
  * This component abstracts the "line-drawing" functionality of the the turtle, so the turtle 
  * can just tell its Pen object to draw a line, and the Pen will worry about whether or not it 
- * is pressed down, and whether or not the line will fit on the display, etc.
+ * is pressed down, and whether or not the line will fit on the display, etc. Note also that
+ * this Pen object is in no way tied to the Turtle class, it is a fully functioning component
+ * that can be used on its own.
  */
 public class Pen {
 
@@ -40,7 +42,7 @@ public class Pen {
 	 * This method draws a line to the display. If the line to draw is out of bounds it will try
 	 * to wrap the line around in bounds, but sometimes this fails (ie the start point gets wrapped
 	 * to the left side of the screen and the end point gets wrapped to the right side of the screen).
-	 * Therefore it does an additional check to make sure the line doesn't get wrapped across the screen.
+	 * If this happens the line will not be drawn.
 	 * @param start : the start point of the line to draw
 	 * @param finish : the end point of the line to draw
 	 */
@@ -92,6 +94,13 @@ public class Pen {
 		thickness = width;
 	}
 	
+	/**
+	 * Makes a line from start to finish with the proper JavaFX boilerplate needed to 
+	 * color it and set its thickness.
+	 * @param start : line starting point
+	 * @param finish : line end point
+	 * @return a line ready to be added to the display
+	 */
 	private Line makeLine(Point start, Point finish) {
 		Line line = new Line(start.getX(), start.getY(), finish.getX(), finish.getY());
 		line.setStroke(color);
