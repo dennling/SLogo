@@ -1,3 +1,8 @@
+// This entire file is part of my masterpiece.
+// Alexander Zapata
+// This is an awesome class that was originally created by Jay and I and later worked on by Elliot and the rest of the crew. This class is incredible because it is
+// the container for all of the pre-made commands for the entire program. This is great design because originally, the class was made to have explicit instances 
+// and names of all of the commands, but with the usage of carefully created properties files and reflection this class has been contained to about 70 lines.  
 package model.commands;
 
 import java.util.ArrayList;
@@ -6,6 +11,10 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
+/**
+ * @author Elliot Bolzan, Jay Doherty, and Alex Zapata
+ *
+ */
 public class Commands {
 
 	private String path = "resources/languages/";
