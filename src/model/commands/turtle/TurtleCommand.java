@@ -1,3 +1,11 @@
+// This entire file is part of my masterpiece.
+// Dennis Ling
+
+// This class is a superclass of Command that also acts as a superclass. It is meant to handle all of the commands that have to directly deal with Turtle objects.
+// This class is well designed because it contains perfect encapsulation of useful methods to minimize duplicated code and maximize utility of said methods.
+// All of these protected methods act as a useful way to stay open for extension, yet closed for modification.
+// This is the second class along the chain of commands that make up my masterpiece.
+
 package model.commands.turtle;
 
 import model.commands.Command;

@@ -1,15 +1,15 @@
-/**
- * 
- */
+// This entire file is part of my masterpiece.
+// Dennis Ling
+
+// This class is a subclass of TurtleCommand and is meant to utilize the command structure to perform commands on all active turtles.
+// This class is well designed because it continues the hierarchy of commands with perfect encapsulation.
+// This is the third class along the chain of commands that make up my masterpiece.
+
 package model.commands.turtle;
 
 import model.parser.Argument;
 import view.visualization.TurtleManager;
 
-/**
- * @author Elliott Bolzan
- *
- */
 public abstract class RepeatableTurtleCommand extends TurtleCommand {
 	
 	@Override
